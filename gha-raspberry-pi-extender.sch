@@ -34,6 +34,7 @@ LIBS:SW-gTransistors
 LIBS:SW-Passives
 LIBS:SW-Microchip
 LIBS:SW-RaspberryPi-GPIO-headers
+LIBS:gha-raspberry-pi-extender-cache
 EELAYER 25 0
 EELAYER END
 $Descr USLetter 11000 8500
@@ -259,10 +260,10 @@ Text Notes 1500 4550 0    60   ~ 0
 Address 2\n0x4+1x2+0x1
 Text Notes 5400 5400 0    60   ~ 0
 Raspberry Pi will need an ethernet connection\nand an external USB power adapter.
-Text Notes 6200 1550 0    60   ~ 0
-Make sure to connect\nboth 5V pins to 5V bus
-Text Notes 6300 4750 0    60   ~ 0
-Not all ground pins\nneed be connected\ntogether. Use 2 at minimum
+Text Notes 6300 1550 0    60   ~ 0
+Make sure to connect\nboth 5V pins to 5V bus.\nThis connection exists\nwithin the Raspberry Pi
+Text Notes 6550 4750 0    60   ~ 0
+Not all ground pins\nneed be connected\ntogether externally. \nUse 2 at minimum.\nConnected internally
 $Comp
 L PWR_FLAG #FLG05
 U 1 1 5859BA9D

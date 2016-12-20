@@ -1,4 +1,4 @@
-update=Monday, December 19, 2016 'PMt' 01:28:08 PM
+update=Monday, December 19, 2016 'PMt' 09:20:07 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -64,3 +64,13 @@ LibName32=/Users/Stephen/Projects/src/github.com/sww1235/KiCAD-Libraries/SW-gTra
 LibName33=/Users/Stephen/Projects/src/github.com/sww1235/KiCAD-Libraries/SW-Passives
 LibName34=/Users/Stephen/Projects/src/github.com/sww1235/KiCAD-Libraries/SW-Microchip
 LibName35=/Users/Stephen/Projects/src/github.com/sww1235/KiCAD-Libraries/SW-RaspberryPi-GPIO-headers
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=Plots/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
