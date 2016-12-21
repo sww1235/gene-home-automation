@@ -34,6 +34,7 @@ LIBS:SW-gTransistors
 LIBS:SW-Passives
 LIBS:SW-Microchip
 LIBS:SW-RaspberryPi-GPIO-headers
+LIBS:SW-gElectroMech
 LIBS:gha-raspberry-pi-extender-cache
 EELAYER 25 0
 EELAYER END
@@ -224,7 +225,7 @@ Wire Wire Line
 	6100 4550 6100 4400
 Connection ~ 6100 4400
 Wire Wire Line
-	800  5050 800  1850
+	800  1850 800  5050
 Wire Wire Line
 	800  1850 1250 1850
 Wire Wire Line
@@ -265,14 +266,73 @@ Make sure to connect\nboth 5V pins to 5V bus.\nThis connection exists\nwithin th
 Text Notes 6550 4750 0    60   ~ 0
 Not all ground pins\nneed be connected\ntogether externally. \nUse 2 at minimum.\nConnected internally
 $Comp
-L PWR_FLAG #FLG05
-U 1 1 5859BA9D
-P 5750 4400
-F 0 "#FLG05" H 5750 4495 50  0001 C CNN
-F 1 "PWR_FLAG" H 5750 4580 50  0000 C CNN
-F 2 "" H 5750 4400 50  0000 C CNN
-F 3 "" H 5750 4400 50  0000 C CNN
-	1    5750 4400
+L +24V #PWR05
+U 1 1 585B2E62
+P 8100 1800
+F 0 "#PWR05" H 8100 1650 50  0001 C CNN
+F 1 "+24V" H 8100 1940 50  0000 C CNN
+F 2 "" H 8100 1800 50  0000 C CNN
+F 3 "" H 8100 1800 50  0000 C CNN
+	1    8100 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #PWR06
+U 1 1 585B2F00
+P 8550 1800
+F 0 "#PWR06" H 8550 1650 50  0001 C CNN
+F 1 "VDD" H 8550 1950 50  0000 C CNN
+F 2 "" H 8550 1800 50  0000 C CNN
+F 3 "" H 8550 1800 50  0000 C CNN
+	1    8550 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG07
+U 1 1 585B2F9E
+P 8100 1800
+F 0 "#FLG07" H 8100 1895 50  0001 C CNN
+F 1 "PWR_FLAG" H 8100 1980 50  0000 C CNN
+F 2 "" H 8100 1800 50  0000 C CNN
+F 3 "" H 8100 1800 50  0000 C CNN
+	1    8100 1800
 	-1   0    0    1   
 $EndComp
+$Comp
+L PWR_FLAG #FLG08
+U 1 1 585B31A0
+P 8550 1800
+F 0 "#FLG08" H 8550 1895 50  0001 C CNN
+F 1 "PWR_FLAG" H 8550 1980 50  0000 C CNN
+F 2 "" H 8550 1800 50  0000 C CNN
+F 3 "" H 8550 1800 50  0000 C CNN
+	1    8550 1800
+	-1   0    0    1   
+$EndComp
+$Comp
+L GNDREF #PWR09
+U 1 1 585B32EE
+P 8850 1800
+F 0 "#PWR09" H 8850 1550 50  0001 C CNN
+F 1 "GNDREF" H 8850 1650 50  0000 C CNN
+F 2 "" H 8850 1800 50  0000 C CNN
+F 3 "" H 8850 1800 50  0000 C CNN
+	1    8850 1800
+	-1   0    0    1   
+$EndComp
+$Comp
+L PWR_FLAG #FLG010
+U 1 1 585B34F6
+P 8850 1800
+F 0 "#FLG010" H 8850 1895 50  0001 C CNN
+F 1 "PWR_FLAG" H 8850 1980 50  0000 C CNN
+F 2 "" H 8850 1800 50  0000 C CNN
+F 3 "" H 8850 1800 50  0000 C CNN
+	1    8850 1800
+	-1   0    0    1   
+$EndComp
+Text Notes 7800 2300 0    60   ~ 0
+These Flags are just to satisfy\nthe ERC and tell the program\nthat these have power connections
+Text Notes 8450 1400 0    60   ~ 0
+VDD is the DC power\nfor the SPST relays.\nThis will depend on\nexactly what relays are\nused but must be DC
 $EndSCHEMATC
