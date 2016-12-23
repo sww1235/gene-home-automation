@@ -169,4 +169,26 @@ sudo pip install paho-mqtt
 sudo /etc/init.d/mosquitto stop
 ```
 
-## AWS configuration part 2
+## AWS configuration part 2 - Lambda functions
+
+Log into the AWS console and select `Lambda` from the services drop down menu at
+the top right.
+
+When the next page loads, click `Create a Lambda Function`. When prompted, use
+the blueprint for Node.js 4.3 and the `blank function` as you will be using the
+code I provide. Click next
+
+The next screen will want you to configure a trigger. Click the dashed box on
+the left and select `Alexa Skills Set`, NOT `Alexa Smart Home`. Click next
+
+Now you will be at the configuration screen. This is where all the testing and
+coding will happen.
+
+Name your function 'Primary Lambda' and choose the runtime Node.js 4.3.
+
+Replace the code that appears in the box further down the page with the code
+from
+[here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/lambda.js)
+
+you will need to change the 4th line by replacing 'yournumber' with the first
+part of the REST API endpoint secret. 

@@ -19,8 +19,8 @@ exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-//        if (event.session.application.applicationId !== "amzn1.ask.skill.yoursecretnumbergoeshere") {
-//             context.fail("Invalid Application ID");
+        // if (event.session.application.applicationId !== "amzn1.ask.skill.yoursecretnumbergoeshere") {
+        // context.fail("Invalid Application ID");
         }
 
         if (event.session.new) {
