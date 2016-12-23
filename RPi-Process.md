@@ -152,19 +152,21 @@ wget https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-C
 ls
 # Now get back to our primary directory
 cd ..
+# now you will need to give your RPi permisson to communicate with AWS.
+wget https://raw.githubusercontent.com/sww1235/gene-home-automation/master/iotpolicy.json
+aws iot create-policy --policy-name "PubSubToAnyTopic" --policy-document file://iotpolicy.json
+# now you need to attach this policy to your primary certificate. Replace
+# CertificateARN in the quotes below with the one you saved in an earlier step.
+aws iot attach-principal-policy --principal "certificateARN" --policy-name "PubSubToAnyTopic"
+# now to test if everything worked.
+aws iot describe-endpoint
+# you should get back some brackets and and endpointAddress. Make note of this as well.
+#
+# Amazon uses a protocol called MQTT to communicate with the RPi. Install the
+# tools you will need to work with it.
+sudo apt-get install mosquitto mosquitto-clients
+sudo pip install paho-mqtt
+sudo /etc/init.d/mosquitto stop
 ```
 
-Now you need to create a file on the RPi in the primary directory we created. Do
-not close the terminal, but instead type `nano` and hit enter. This will open a
-simple text editor that you can type the following in, including the :
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [{
-        "Effect": "Allow",
-        "Action":["iot:*"],
-        "Resource": ["*"]
-    }]
-}
-```
+## AWS configuration part 2
