@@ -92,6 +92,36 @@ do things. Click on the user you just created and then click on the
 -   IAMFullAccess
 -   AWSIoTFullAccess
 
+Now click on Roles on the left side menu and create a new Role. Name it 'IoTRole'. Click on this role that you just created and make sure the permission
+tab is selected. You now want to `Create Role Policy`. When prompted for a name, use 'ForAccessToLogsAndIoT'. When prompted for the actual policy, paste the text below including all the brackets.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iot:*",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iot:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+```
+
 Now go back up to the services menu and click on the `IoT` service. Keep this
 page up as you work on the next section.
 
@@ -191,4 +221,41 @@ from
 [here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/lambda.js)
 
 you will need to change the 4th line by replacing 'yournumber' with the first
-part of the REST API endpoint secret. 
+part of the REST API endpoint secret.
+
+## AWS configuration part 3 - Alexa Voice Function/skill
+
+An Alexa Voice function/skill is the piece of the puzzle where you define what voice
+commands you want. To access this go to the [Amazon Developer
+Console](https://developer.amazon.com/home.html). You will then want to click on
+`Alexa` in the top bar and then click on the `Alexa Skills Kit` not `Alexa Voice
+Services`.
+
+Click `Add a New Skill`
+
+Make sure to select `Custom Interaction Model` under `skill type`
+
+Enter a `name` and `invocation name` for the skill. The `name` can be anything
+within Amazons requirements (2-50 characters) but the `invocation name` needs to
+be something short. This is because you will be saying this every time you want
+to control your lights.
+
+See the section **Examples** for more information on this.
+
+This will contain a number of 'intents' which represent an individual voice
+command set. For example, the intent would be "ControlLights" which then
+contains a number of slots that represent different rooms or states. I have
+provided a mostly complete document so you can see how it is supposed to be
+structured. Amazons documentation on this is
+[here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interaction-model-reference)
+Currently, since you only want to control lights, I have implemented one intent
+with two slots
+[here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/skill-intents.json).
+The two slots select the particular room or light and the light state.
+
+Paste the intent file from [here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/skill-intents.json) into
+
+
+## Examples
+
+TODO: add example of complete voice command
