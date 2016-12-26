@@ -1,7 +1,7 @@
 {
   "intents": [
     {
-      "intent": "controlLights",
+      "intent": "ControlLights",
       "slots": [
         {
           "name": "room",
