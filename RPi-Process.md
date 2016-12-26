@@ -240,21 +240,89 @@ within Amazons requirements (2-50 characters) but the `invocation name` needs to
 be something short. This is because you will be saying this every time you want
 to control your lights.
 
-See the section **Examples** for more information on this.
+See the end of this section for more information on this.
 
-This will contain a number of 'intents' which represent an individual voice
-command set. For example, the intent would be "ControlLights" which then
+Ignore all the Global options for now and click on `Interaction Model`.
+
+This is where you will actually configure what you want Alexa to respond to.
+
+The first box will contain a number of 'intents' which represent an individual
+voice command set.
+
+For example: the intent would be "ControlLights" which then
 contains a number of slots that represent different rooms or states. I have
-provided a mostly complete document so you can see how it is supposed to be
+provided a complete document so you can see how it is supposed to be
 structured. Amazons documentation on this is
 [here](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interaction-model-reference)
+
 Currently, since you only want to control lights, I have implemented one intent
 with two slots
 [here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/skill-intents.json).
 The two slots select the particular room or light and the light state.
 
-Paste the intent file from [here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/skill-intents.json) into
+Paste the intent file from [here](https://raw.githubusercontent.com/sww1235/gene-home-automation/master/Code/skill-intents.json) into the `Intent Schema` text box.
 
+Now you will need to define two `Custom Slot types`. These are referenced in the
+intent file as the type of the slot.
+
+Click `Add Slot Type` and in the `Enter Type` text box type in `onOff` exactly.
+Now in the `Enter Values` text box, enter the list below:
+
+-   On
+-   Off
+
+Now click `Save`
+
+Now we need to set up another custom slot type for all the rooms you want to
+control the lights in. I would recomend entering all the rooms you could
+possibly want here although I believe this list is fairly easy to change.
+
+**Note:** These are going to be part of the command you will speak, so make sure
+they are what you want to be speaking. Each of these will be a separate command
+so if you want to be able to control different light groups then make sure to
+define each one here. You can see I have provided some examples of this in the
+list.
+
+Click `Add Slot Type` and in the `Enter Type` text box type in `room` exactly.
+Now in the `Enter Values` text box, enter the list of rooms. I have provided some of the rooms below:
+
+-   Office
+-   Kitchen
+-   Master Bedroom
+-   Small Bathroom
+-   Large Bathroom
+-   Dining Room
+-   Living Room
+-   Living Room Overheads
+-   Living Room Track Lights
+
+Before clicking save here, make sure to copy and paste this list of rooms to
+another document that you can access easily, as it is going to be something you
+will need when you configure the RPi.
+
+Now the final part of configuring this skill is setting up `Sample Utterances`.
+These are essentially samples of the commands that you want Alexa to respond to.
+These follow a very specific structure so double check for any typos. The
+structure is: "Intent Name" "command".
+
+An example using our previously defined intent would be:
+
+```text
+ControlLights turn {room} lights {state}
+```
+
+Or
+
+```text
+ControlLights {room} lights {state}
+```
+
+Notice that the text in braces are the custom slot type names from the `Intent
+Schema` text box at the top of the page. These are essentially variables in the
+commands so you do not have to type the same command 20 times.
+
+I would recommend making a list of all these `Sample Utterances` as these are
+going to be the actual commands you will use to interface with your house.
 
 ## Examples
 
