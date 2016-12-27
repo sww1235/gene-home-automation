@@ -75,13 +75,10 @@ function onIntent(intentRequest, session, callback) {
     var intent = intentRequest.intent,
         intentName = intentRequest.intent.name;
 
-    //intent handling
+    //intent handling, need a case and function for each case
     switch (intentName){
-        case "GetTemperature":
-            getTemperature(intent, session, callback);
-            break;
-        case "GetHumidity":
-            getHumidity(intent, session, callback);
+        case "ControlLights":
+            controlLights(intent, session, callback);
             break;
         case "AMAZON.HelpIntent":
             getHelp(callback);
@@ -116,14 +113,13 @@ function getWelcomeResponse(callback) {
     var speechOutput = "Desert home";
     callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
-
+//you can add some help text in the speechOutput variable
 function getHelp(callback) {
     var cardTitle = "Help";
     var repromptText = "Are you there? What would you like to know?";
     var shouldEndSession = false;
 
-    var speechOutput = "Welcome to Desert Home," +
-        "dave is still working on what to say here,";
+    var speechOutput = "Alexa Here," + "Enter help text here";
     callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
 
@@ -134,50 +130,41 @@ function handleSessionEndRequest(callback) {
     callback({}, buildSpeechletResponse(cardTitle, speechOutput, null, shouldEndSession));
 }
 
-function getTemperature(intent, session, callback, sayit) {
-    var cardTitle = "Temperature";
+
+//This is the function that takes an intent and 
+function controlLights(intent, session, callback) {
+    var cardTitle = "Lights";
     var repromptText = "";
     var sessionAttributes = {};
     var shouldEndSession = false;
-    var temp = 12;
+    var newstate = intent.slots.state.value;
+    var room = intent.slots.room.value;
 
-   iotData.getThingShadow(config.params, function(err, data) {
-       if (err)  {
+    //Set the desired part of the shadow document to include the room and newstate
+    var payloadObj={ "state":
+                        { "desired":
+                            {room:newstate}
+                        }
+    };
+    //Prepare the parameters of the update call
+    var paramsUpdate = {
+                     "thingName" : config.IOT_THING_NAME,
+                     "payload" : JSON.stringify(payloadObj)
+    };
+
+    //Update Device Shadow
+    iotData.updateThingShadow(paramsUpdate, function(err, data) {
+        if (err){
            console.log(err, err.stack); // an error occurred
-           temp = "an error";
-        } else {
-           //console.log(data.payload);           // successful response
-           var payload = JSON.parse(data.payload);
-           temp = payload.state.reported.temp;
-         }
-
-        speechOutput = "The temperature is " + temp + " degrees fahrenheit,";
-        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        }
+        else {
+            speechOutput = "The" + room + "light has been turned " + newstate + "!";
+            console.log(data);
+            callback(sessionAttributes,buildSpeechletResponse(intent.name, speechOutput, repromptText, shouldEndSession));
+        }
     });
-}
 
-function getHumidity(intent, session, callback) {
-   var cardTitle = "Humidity";
-   var repromptText = "";
-   var sessionAttributes = {};
-   var shouldEndSession = false;
 
-   var humidity = 12;
-
-   iotData.getThingShadow({ thingName: 'house' }, function(err, data) {
-       if (err)  {
-           console.log("error back from getThingShadow");
-           console.log(err, err.stack); // an error occurred
-           humidity = "an error";
-        } else {
-           //console.log(data.payload);           // successful response
-           payload = JSON.parse(data.payload);
-           humidity = payload.state.reported.humid;
-         }
-
-        speechOutput = "The humidity is " + humidity + " percent.";
-        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-    });
 }
 
 // --------------- Helpers that build all of the responses -----------------------
