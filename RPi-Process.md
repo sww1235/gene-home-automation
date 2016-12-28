@@ -1,4 +1,4 @@
-# Process for getting RPi setup
+# Process for getting Raspberry Pi setup
 
 Note before proceeding: Amazon does charge for these services, however there is
 a 1 year free trial and after the trial expires, the typical user will only
@@ -6,15 +6,40 @@ experience around $0.25 a month maximum. The pricing is linked
 [here](https://aws.amazon.com/iot-platform/pricing/), however we will be using
 the US East (N. Virginia) datacenter for the IoT stuff.
 
-## Raspberry Pi setup Part 1
+**Note:** I will be abreviating Raspberry Pi as RPi in this document.
+
+## Raspberry Pi setup Part 0
 
 From [here](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c)
 
-Install Raspberrian on the SD card using NOOBS. I recommend purchasing
-[this kit](https://www.adafruit.com/products/3058) as it makes getting started
-with the RPi very simple and easy.
+I recommend purchasing [this kit](https://www.adafruit.com/products/3058) for
+the RPi as it makes getting started with the RPi very simple and easy.
 
-TODO: add steps on setting up raspberry pi.
+You will also need a monitor with an HDMI input such as a TV, a HDMI cable, as
+well as a spare USB keyboard and mouse. **Note:** you will just need these
+things for configuring the RPi, not when it is in operation.
+
+Insert the included micro SD card into the RPi.
+
+Connect the HDMI cable between the monitor and the RPi.
+
+Plug the keyboard and mouse into any of the USB ports on the RPi.
+
+Connect an ethernet cable between your [Apple Airport
+Router](https://d3nevzfk7ii3be.cloudfront.net/igi/gAYpkB42MaCEptaN.large) and
+the Rpi. Either I or Malcolm can help walk you through this if you are confused.
+You may need to disconnect your new Mac Pro in order to hook the RPi up
+temporarily.
+
+Connect the included USB power adapter to the RPi and then plug the adapter in
+to a power outlet.
+
+The RPi should boot up into NOOBS (New Out Of Box Software) which should prompt
+you to setup your language preferences and then present you with a list of
+operating systems to install on the RPi. You will want to select `RASPBIAN
+JESSIE LITE` 
+
+## Raspberry Pi setup Part 1
 
 Open a terminal (found on the desk under the name LXTerminal) and run the
 commands (by typing them and hitting enter after each line):
@@ -28,6 +53,10 @@ sudo apt-get install -y python-rpi.gpio
 sudo apt-get install -y python-smbus
 sudo apt-get install -y i2c-tools
 ```
+
+
+**NOTE:** Make sure to wait until each command has completed before typing the
+next one as some may take some time to complete.
 
 This installs all the tools that we will need, to work with the GPIO and Amazon.
 
