@@ -1,4 +1,13 @@
 #!/usr/bin/python
+
+"""
+Interfaces with AWSIoT and controls relays.
+
+The relays are connected to a Raspberry Pi using custom i2c expansion boards
+
+This code has been heavily inspired by David Thompson at Desert-home.com
+"""
+
 import os
 import sys
 import time
@@ -7,10 +16,16 @@ import ssl
 import json
 import pprint
 
+from mytime import timer, checkTimer
+
 pp = pprint.PrettyPrinter(indent=2)
 
+# This is essentially boilerplate, no modifications necessary here
+
+
 def on_awsConnect(client, userdata, flags, rc):
-    print("mqtt connection to AWSIoT returned result: " + str(rc) )
+
+    print("mqtt connection to AWSIoT returned result: " + str(rc))
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed. You still have to do the
     # reconnect in code because that doesn't happen automatically
@@ -18,14 +33,16 @@ def on_awsConnect(client, userdata, flags, rc):
                       (awsShadowDocuments, 1)])
 
 def on_awsMessage(client, userdata, msg):
-    global eastPatioLight
+    # this is so I can access the rooms variable in the function.
+    global rooms
 
     # If you want to see the shadow documents to observe what is going on
     # uncomment the prints below.
-    #print "TOPIC = ",
-    #print msg.topic
-    #print "PAYLOAD = ",
+    # print "TOPIC = ",
+    # print msg.topic
+    # print "PAYLOAD = ",
     payload = {}
+    # take payload string and convert it into python json object
     payload = json.loads(msg.payload)
     #pp.pprint (payload)
     #print ""
@@ -134,14 +151,27 @@ def updateIotShadow():
 # These are the three items we'll deal with in this example
 # They represent real devices that measure or change something
 # that have been implemented somewhere.
-temperature = 79.1
-barometer = 1234.5
-eastPatioLight = "on"
+# temperature = 79.1
+# barometer = 1234.5
+# eastPatioLight = "on"
 
+
+# this variable stores all the individual relay groups and their states. Make
+# sure to use the list of rooms that are in the custom slot type you created on
+# AWSIoT to complete this variable. I have provided some examples here so you
+# know how the formatting needs to be. This is a python dictionary if you need
+# to google it. (essentially a key:value store)
+# notice that all the keys aka room names have to be one word here.
+# 0 = off, 1=on
+rooms = dict(office=0, kitchen=0, masterBedroom=0, smallBathroom=0,
+                largeBathroom=0, diningRoom=0, livingRoom=0, livingRoomOverheads=0,
+                livingRoomTrackLights=0)
 
 
 # Actually starts here
-if __name__ == "__main__":
+if __name__ == "__main__":  # this line checks to see if the script is executed
+                            # directly and was not imported. Essentially the
+                            # main function in other languages
     # these are the two aws subscriptions you need to operate with
     # the 'delta' is for changes that need to be taken care of
     # and the 'documents' is where the various states and such
@@ -155,7 +185,7 @@ if __name__ == "__main__":
     awsMqtt = mqtt.Client()
     awsMqtt.on_connect = on_awsConnect
     awsMqtt.on_message = on_awsMessage
-    # certificates, host and port to use
+    # certificates, host and port to use. TODO: need to update the cert paths
     awsHost = "data.iot.us-east-1.amazonaws.com"
     awsPort = 8883
     caPath = "/home/pi/src/house/keys/aws-iot-rootCA.crt"
@@ -177,6 +207,7 @@ if __name__ == "__main__":
     print("Alexa Handling started")
 
     # The main loop
+    print ("starting main loop")
     while True:
         # Wait a bit
         checkTimer.tick()
