@@ -184,7 +184,7 @@ Now you will need to create a new user in another part of AWS called Internet
 Access Management (IAM). This is how the RPi and Amazon are going to be able to
 communicate securely. This will be listed under services at the top. You will
 click on IAM, then click on the users tab then click `create new user`. Enter a
-username, lets use `piControl` for now, and click continue.
+username, lets use `piControl` for now, and select `Programatic Usage`. Click continue.
 
 **IMPORTANT:** On the next screen you will see a link to `Show User Security
 Credentials`. These are further secrets you will need to communicate between
