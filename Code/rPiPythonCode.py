@@ -8,8 +8,8 @@ The relays are connected to a Raspberry Pi using custom i2c expansion boards
 This code has been heavily inspired by David Thompson at Desert-home.com
 """
 
-import os
-import sys
+# import os
+# import sys
 import time
 import ssl
 import json
@@ -64,12 +64,12 @@ def on_awsMessage(client, userdata, msg):
         print("got a delta")
         pp.pprint(payload["state"])
         for item in payload["state"].keys():
-            if item == "eastPatioLight":
+            if item in rooms.keys():
                 command = str(payload["state"][item])
                 print("got command for east patio light: ", command)
                 # This is where you would actually do something to
                 # change the state of a device.
-                eastPatioLight = command
+                rooms[item] = command
             else:
                 print("I don't know about item ", item)
 
@@ -133,38 +133,32 @@ def on_awsMessage(client, userdata, msg):
     else:
         print("I don't have a clue how I got here")
 
+# Keeping this function around for now, but I dont think I need it.
 
-def updateIotShadow():
-    """
-    Keep the shadow updated with the latest device states.
-
-    If you go over and push a button to turn on a light, you want the shadow
-    to know so everything can work properly.
-    """
-    global temperature
-    global barometer
-    global eastPatioLight
-    print("Variable states: ", temperature, barometer, eastPatioLight)
-    # Create report in JSON format; this should be an object, etc.
-    # but for now, this will do.
-    report = "{ \"state\" : { \"reported\": {"
-    report += "\"temp\": \"%s\", " % (int(round(temperature)))
-    report += "\"barometer\": \"%s\", " % (int(round(barometer)))
-    report += "\"eastPatioLight\": \"%s\", " % (eastPatioLight.lower())
-    report += "\"lastEntry\": \"isHere\" "  # This entry is only to make it easier on me
-    report += "} } }"
-    # Print something to show it's alive
-    print("On Tick: ", report)
-    err = awsMqtt.publish(awsShadowUpdate, report)
-    if err[0] != 0:
-        print("got error {} on publish".format(err[0]))
-
-# These are the three items we'll deal with in this example
-# They represent real devices that measure or change something
-# that have been implemented somewhere.
-# temperature = 79.1
-# barometer = 1234.5
-# eastPatioLight = "on"
+# def updateIotShadow():
+#     """
+#     Keep the shadow updated with the latest device states.
+#
+#     If you go over and push a button to turn on a light, you want the shadow
+#     to know so everything can work properly.
+#     """
+#     global temperature
+#     global barometer
+#     global eastPatioLight
+#     print("Variable states: ", temperature, barometer, eastPatioLight)
+#     # Create report in JSON format; this should be an object, etc.
+#     # but for now, this will do.
+#     report = "{ \"state\" : { \"reported\": {"
+#     report += "\"temp\": \"%s\", " % (int(round(temperature)))
+#     report += "\"barometer\": \"%s\", " % (int(round(barometer)))
+#     report += "\"eastPatioLight\": \"%s\", " % (eastPatioLight.lower())
+#     report += "\"lastEntry\": \"isHere\" "  # This entry is only to make it easier on me
+#     report += "} } }"
+#     # Print something to show it's alive
+#     print("On Tick: ", report)
+#     err = awsMqtt.publish(awsShadowUpdate, report)
+#     if err[0] != 0:
+#         print("got error {} on publish".format(err[0]))
 
 
 # this variable stores all the individual relay groups and their states. Make
@@ -175,8 +169,8 @@ def updateIotShadow():
 # notice that all the keys aka room names have to be one word here.
 # 0 = off, 1=on
 rooms = dict(office=0, kitchen=0, masterBedroom=0, smallBathroom=0,
-            largeBathroom=0, diningRoom=0, livingRoom=0, livingRoomOverheads=0,
-            livingRoomTrackLights=0)
+             largeBathroom=0, diningRoom=0, livingRoom=0,
+             livingRoomOverheads=0, livingRoomTrackLights=0)
 
 
 # Actually starts here
@@ -203,7 +197,9 @@ if __name__ == "__main__":  # this line checks to see if the script is executed
     certPath = "/home/pi/src/house/keys/cert.pem"
     keyPath = "/home/pi/src/house/keys/privkey.pem"
     # now set up encryption and connect
-    awsMqtt.tls_set(caPath, certfile=certPath, keyfile=keyPath, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+    awsMqtt.tls_set(caPath, certfile=certPath, keyfile=keyPath,
+                    cert_reqs=ssl.CERT_REQUIRED,
+                    tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
     awsMqtt.connect(awsHost, awsPort, keepalive=60)
     print("did the connect to AWSIoT")
 
@@ -214,7 +210,6 @@ if __name__ == "__main__":  # this line checks to see if the script is executed
     # this timer fires every so often to update the
     # Amazon alexa device shadow; check 'seconds' below
     shadowUpdateTimer = timer(updateIotShadow, seconds=10)
-    weatherUpdate = timer(updateWeather, seconds=3)
     print("Alexa Handling started")
 
     # The main loop
