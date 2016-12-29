@@ -166,7 +166,8 @@ functionality like a house or an industrial waterpump.
 
 For your house: We will create a house object.
 
-1.  Click on `Create a resource`
+1.  Click on `Registry - Things`
+2.  Click on `Register a Thing`
 1.  Click on `Create a thing`
 1.  Type 'house' as the name without the single quotes
 1.  Click `Create`
