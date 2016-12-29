@@ -21,7 +21,7 @@ exports.handler = function (event, context) {
 
         // if (event.session.application.applicationId !== "amzn1.ask.skill.yoursecretnumbergoeshere") {
         // context.fail("Invalid Application ID");
-        }
+        //}
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
@@ -131,7 +131,7 @@ function handleSessionEndRequest(callback) {
 }
 
 
-//This is the function that takes an intent and 
+//This is the function that takes an intent and
 function controlLights(intent, session, callback) {
     var cardTitle = "Lights";
     var repromptText = "";
