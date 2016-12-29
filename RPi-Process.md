@@ -203,11 +203,11 @@ shot them as well as copy-paste them somewhere safe. You may also want to
 click the button that says `Download Credentials`. After this hit the `Close
 button`. You should see the user you just created.
 
-Now click on Roles on the left side menu and create a new Role. Name it
-'IoTRole'. Click on this role that you just created and make sure the permission
-tab is selected. You now want to `Create Role Policy`. When prompted for a name,
-use 'ForAccessToLogsAndIoT'. When prompted for the actual policy, paste the text
-below including all the brackets.
+Now click on Policies on the right hand side of the screen. Click
+`Create Policy` then click `Create your Own Policy`.
+
+When prompted for a name, use 'ForAccessToLogsAndIoT'. When prompted for the
+actual policy, paste the text below including all the brackets.
 
 ```json
 {
@@ -236,6 +236,9 @@ below including all the brackets.
 }
 ```
 
+Now click on Roles on the left side menu and create a new Role. Name it
+'IoTRole'. Search for your newly created policy `ForAccessToLogsAndIoT` and
+attach it to this new role.
 
 
 Now go back up to the services menu and click on the `IoT` service. Keep this
