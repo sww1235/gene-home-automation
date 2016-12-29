@@ -160,6 +160,8 @@ Console](https://console.aws.amazon.com/iot/home?region=us-east-1#/dashboard)
 using your amazon account. You may need to setup an acount here, but it should
 link to your existing amazon account.
 
+Navigate to AWSIoT under services.
+
 You will then need to create a 'thing' which represents what you want to
 control. This is essentially an object that encapsulates large amounts of
 functionality like a house or an industrial waterpump.
