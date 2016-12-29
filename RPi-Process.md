@@ -184,7 +184,17 @@ Now you will need to create a new user in another part of AWS called Internet
 Access Management (IAM). This is how the RPi and Amazon are going to be able to
 communicate securely. This will be listed under services at the top. You will
 click on IAM, then click on the users tab then click `create new user`. Enter a
-username, lets use `piControl` for now, and select `Programatic Usage`. Click continue.
+username, lets use `piControl` for now, and select `Programatic Usage`. Click
+continue.
+
+Now in order to have this user be useful, you will need to give it permission to
+do things. Click on the user you just created and then click on the
+`Permissions` tab. Then click on `Attach Existing Policies Directly`. Give this
+user the permissions listed below:
+
+-   AWSLambdaFullAccess
+-   IAMFullAccess
+-   AWSIoTFullAccess
 
 **IMPORTANT:** On the next screen you will see a link to `Show User Security
 Credentials`. These are further secrets you will need to communicate between
@@ -192,14 +202,6 @@ AWS and the RPi. **These will only be shown once** so make certain to screen
 shot them as well as copy-paste them somewhere safe. You may also want to
 click the button that says `Download Credentials`. After this hit the `Close
 button`. You should see the user you just created.
-
-Now in order to have this user be useful, you will need to give it permission to
-do things. Click on the user you just created and then click on the
-`Permissions` tab. Give this user the permissions listed below:
-
--   AWSLambdaFullAccess
--   IAMFullAccess
--   AWSIoTFullAccess
 
 Now click on Roles on the left side menu and create a new Role. Name it
 'IoTRole'. Click on this role that you just created and make sure the permission
@@ -233,6 +235,8 @@ below including all the brackets.
     ]
 }
 ```
+
+
 
 Now go back up to the services menu and click on the `IoT` service. Keep this
 page up as you work on the next section.
