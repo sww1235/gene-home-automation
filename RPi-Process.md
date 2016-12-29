@@ -155,7 +155,7 @@ and partially from
 For all the Amazon stuff you will be working with Amazon's Web Services (AWS)
 which is their cloud infrastucture.
 
-On another computer:
+On your mac:
 
 you will need to login to the [AWS
 Console](https://console.aws.amazon.com/iot/home?region=us-east-1#/dashboard)
@@ -176,7 +176,8 @@ For your house: We will create a house object.
 
 This will be your newly created 'thing'. In the details pane, there will be an
 entry called `REST API endpoint`. This is one of the secrets that you will need
-in order to enable communication between the RPi and Amazon.
+in order to enable communication between the RPi and Amazon. Make sure to copy
+and paste this somewhere as you will need it later.
 
 Now you will need to create a new user in another part of AWS called Internet
 Access Management (IAM). This is how the RPi and Amazon are going to be able to
@@ -234,79 +235,6 @@ below including all the brackets.
 
 Now go back up to the services menu and click on the `IoT` service. Keep this
 page up as you work on the next section.
-
-## Raspberry Pi setup Part 2
-
-First you will want to open a terminal as most of what you will be doing will be
-via the command line.
-
-First you will need to create a directory(folder) to work out of:
-
-**NOTE:** anything not proceeded by a \# is a command you type into the terminal
-and hit enter after each line.
-
-```bash
-# make sure you are in your home directory
-cd
-# create a new directory
-mkdir home-automation
-# enter the directory you just created
-cd home-automation
-# install amazon's software on your machine
-sudo pip install awscli # you may be prompted to enter your password
-# now to configure the AWS interface
-aws configure
-# This will prompt you for the credentials you were given when you created a new
-# user on AWS.
-# you will also be prompted for a region. use us-east-1 as this is the only
-# region that will work.
-#
-# Now you have to create a 'thing' on the RPi like you did on the AWS website.
-aws iot create-thing --thing-name "house"
-# to test that this worked, run:
-aws iot list-things
-# and you should get a print out with a lot of brackets and a list of 'things'
-#
-# Now to make sure everything is secure, you will need to create public and
-# private encryption keys
-#
-# Create a new directory for these keys and enter it
-mkdir keys
-cd keys
-# Now actually create the keys
-# note: enter this all on one line without the '\'
-aws iot create-keys-and-certificate --set-as-active \
---certificate-pem-outfile cert.pem \
---public-key-outfile publicKey.pem \
---private-key-outfile privkey.pem
-# now you need to get another secret, this time called the ARN or AWS Resource
-# Name. This is found in the output of the command below. It will be the line
-# headed by certificateARN
-aws iot list-certificates
-# Now you need to get a certificate signed by AWS so you can trust them.
-# Enter the below, all on one line and hit enter after '.crt'.
-wget https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem -O aws-iot-rootCA.crt
-# To make sure everything is fine so far, run the command below and compare its
-# output to the stuff in quotes below:
-# 'aws-iot-rootCA.crt  cert.pem  privkey.pem  publicKey.pem'
-ls
-# Now get back to our primary directory
-cd ..
-# now you will need to give your RPi permisson to communicate with AWS.
-wget https://raw.githubusercontent.com/sww1235/gene-home-automation/master/iotpolicy.json
-aws iot create-policy --policy-name "PubSubToAnyTopic" --policy-document file://iotpolicy.json
-# now you need to attach this policy to your primary certificate. Replace
-# CertificateARN in the quotes below with the one you saved in an earlier step.
-aws iot attach-principal-policy --principal "certificateARN" --policy-name "PubSubToAnyTopic"
-# now to test if everything worked.
-aws iot describe-endpoint
-# you should get back some brackets and and endpointAddress. Make note of this as well.
-#
-# Amazon uses a protocol called MQTT to communicate with the RPi. Install the
-# tools you will need to work with it.
-sudo pip install paho-mqtt
-sudo /etc/init.d/mosquitto stop
-```
 
 ## AWS configuration part 2 - Lambda functions
 
@@ -433,6 +361,79 @@ commands so you do not have to type the same command 20 times.
 
 I would recommend making a list of all these `Sample Utterances` as these are
 going to be the actual commands you will use to interface with your house.
+
+## Raspberry Pi setup Part 2
+
+First you will want to open a terminal as most of what you will be doing will be
+via the command line.
+
+First you will need to create a directory(folder) to work out of:
+
+**NOTE:** anything not proceeded by a \# is a command you type into the terminal
+and hit enter after each line.
+
+```bash
+# make sure you are in your home directory
+cd
+# create a new directory
+mkdir home-automation
+# enter the directory you just created
+cd home-automation
+# install amazon's software on your machine
+sudo pip install awscli # you may be prompted to enter your password
+# now to configure the AWS interface
+aws configure
+# This will prompt you for the credentials you were given when you created a new
+# user on AWS.
+# you will also be prompted for a region. use us-east-1 as this is the only
+# region that will work.
+#
+# Now you have to create a 'thing' on the RPi like you did on the AWS website.
+aws iot create-thing --thing-name "house"
+# to test that this worked, run:
+aws iot list-things
+# and you should get a print out with a lot of brackets and a list of 'things'
+#
+# Now to make sure everything is secure, you will need to create public and
+# private encryption keys
+#
+# Create a new directory for these keys and enter it
+mkdir keys
+cd keys
+# Now actually create the keys
+# note: enter this all on one line without the '\'
+aws iot create-keys-and-certificate --set-as-active \
+--certificate-pem-outfile cert.pem \
+--public-key-outfile publicKey.pem \
+--private-key-outfile privkey.pem
+# now you need to get another secret, this time called the ARN or AWS Resource
+# Name. This is found in the output of the command below. It will be the line
+# headed by certificateARN
+aws iot list-certificates
+# Now you need to get a certificate signed by AWS so you can trust them.
+# Enter the below, all on one line and hit enter after '.crt'.
+wget https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem -O aws-iot-rootCA.crt
+# To make sure everything is fine so far, run the command below and compare its
+# output to the stuff in quotes below:
+# 'aws-iot-rootCA.crt  cert.pem  privkey.pem  publicKey.pem'
+ls
+# Now get back to our primary directory
+cd ..
+# now you will need to give your RPi permisson to communicate with AWS.
+wget https://raw.githubusercontent.com/sww1235/gene-home-automation/master/iotpolicy.json
+aws iot create-policy --policy-name "PubSubToAnyTopic" --policy-document file://iotpolicy.json
+# now you need to attach this policy to your primary certificate. Replace
+# CertificateARN in the quotes below with the one you saved in an earlier step.
+aws iot attach-principal-policy --principal "certificateARN" --policy-name "PubSubToAnyTopic"
+# now to test if everything worked.
+aws iot describe-endpoint
+# you should get back some brackets and and endpointAddress. Make note of this as well.
+#
+# Amazon uses a protocol called MQTT to communicate with the RPi. Install the
+# tools you will need to work with it.
+sudo pip install paho-mqtt
+sudo /etc/init.d/mosquitto stop
+```
 
 ## Examples
 
