@@ -10,8 +10,6 @@ the US East (N. Virginia) datacenter for the IoT stuff.
 
 ## Raspberry Pi setup Part 0
 
-From [here](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c)
-
 I recommend purchasing [this kit](https://www.adafruit.com/products/3058) for
 the RPi as it makes getting started with the RPi very simple and easy.
 
